@@ -3,6 +3,7 @@
   display: inline;
   font-family: Impact;
   margin: 3px;
+  touch-action: manipulation; /* disable double tap to zoom*/
 }
 
 div{
