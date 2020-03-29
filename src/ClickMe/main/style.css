@@ -1,7 +1,14 @@
-.grid-container {
-    display: grid;
+* {
+  text-align: left;
+  display: inline;
+  font-family: Impact;
+  margin: 3px;
 }
 
-.grid-blank{
-    display: inline-grid;
+div{
+    display: block;
+}
+
+title{
+    display: none;
 }

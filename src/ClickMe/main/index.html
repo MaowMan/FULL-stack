@@ -4,10 +4,32 @@
         <meta charset="utf-8">
         <title>ClickMe</title>
         <link href="style.css", rel="stylesheet" , type="text/css">
+        <script src="app.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     </head>
-    <body>
-        <div class="grid-container">
-
+    <body onload="init()">
+        <div>
+            <h1>ClickMe</h1>
         </div>
+        <div>
+            <p>a website design to destroy your mouse</p>
+        </div>
+        <div>
+            <button onclick="clicky()">clickmeeee</button>
+        </div>
+        <div>
+            <p>count:</p>
+            <p id="count">0</p>
+        </div>
+        <div>
+            <p>cps:</p>
+            <p id="cps">0</p>
+        </div>
+        <div>
+            <button , onclick="init()">reset</button>
+        </div>
+        <footer>
+            <p>By Github:MaowMan 2020</p>
+        </footer>
     </body>
 </html>
