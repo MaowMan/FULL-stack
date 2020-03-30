@@ -6,6 +6,10 @@
     padding: 0px;
 }
 
+div {
+    display: block;
+}
+
 title {
     display: none;
 }
