@@ -15,6 +15,7 @@
 ## 文章列表
 
 1. [From zero to 1](day1.md)
+2. [Milestone](day2.md)
 
 ## 成品連結
 
