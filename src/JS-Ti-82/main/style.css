@@ -1,0 +1,11 @@
+* {
+    display: inline;
+    text-align: center;
+    font-family: 'Orbitron', sans-serif;
+    margin: 0px;
+    padding: 0px;
+}
+
+title {
+    display: none;
+}
