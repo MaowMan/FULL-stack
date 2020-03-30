@@ -5,3 +5,5 @@
 順便紀錄蹭個備審，生活駭客
 
 - Project I: ClickMe [link](/src/ClickMe/base.md)
+
+- Project II: JS-Ti-82 [link](/src/JS-Ti-82/base.md) 
