@@ -8,9 +8,12 @@ function init(){
 }
 
 function clicky(){
+    if (varObj.clickcount===0){
+        varObj.t0=new Date()
+    }
     varObj.clickcount+=1;
     let tn=new Date();
-    varObj.clickcps=(varObj.clickcount/(tn.getTime()-varObj.t0.getTime())).toPrecision(5);
+    varObj.clickcps=(varObj.clickcount/(tn.getTime()-varObj.t0.getTime()))*1000;
     update();
 }
 
