@@ -19,5 +19,5 @@
 
 # 成品連結
 
-[link](/main/index.html)
+[link](main/index.html)
 
