@@ -4,6 +4,7 @@
     font-family: 'Orbitron', sans-serif;
     margin: 2px;
     padding: 0px;
+    touch-action: manipulation;
 }
 
 input[type=button] {
