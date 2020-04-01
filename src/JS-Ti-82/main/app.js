@@ -1,9 +1,12 @@
 function init() {
     $(":button").attr('onclick', "Button_pressed(this);");
+    if (localStorage.getItem("memory") != null) {
+        $(".mainview").attr("value", String(localStorage.getItem("memory")));
+    }
 }
 
 function Button_pressed(button) {
-    $(".mainview").attr("value", String($(".mainview").val()) + String(button.value))
+    $(".mainview").attr("value", String($(".mainview").val()) + String(button.value));
     Check_view();
 }
 
@@ -26,8 +29,9 @@ function Check_view() {
             content = String(result);
         } catch (error) {
             alert(error);
-            content = new String()
+            content = new String();
         }
     }
+    localStorage.setItem("memory", content);
     $(".mainview").attr("value", content);
 }
