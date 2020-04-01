@@ -13,11 +13,10 @@
 - LocalStorage
 - Hosting on GithubPages
 
-# 文章列表
+## 文章列表
 
 1. [快段考了有夠ㄅㄑ](day1.md)
 
-# 成品連結
+## 成品連結
 
 [link](main/index.html)
-
