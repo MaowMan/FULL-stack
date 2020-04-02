@@ -6,4 +6,6 @@
 
 - Project I: ClickMe [link](/src/ClickMe/base.md)
 
-- Project II: JS-Ti-82 [link](/src/JS-Ti-82/base.md) 
+- Project II: JS-Ti-82 [link](/src/JS-Ti-82/base.md)
+
+- Project III: Fire-roll-caller [link](/src/Fire-roll-caller/base.md)
