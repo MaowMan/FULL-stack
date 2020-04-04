@@ -19,7 +19,7 @@
 
 ## 成品連結
 
-[link](/main/index.html)
+[link]()
 
 ## 結語
 
