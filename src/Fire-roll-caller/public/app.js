@@ -13,11 +13,11 @@ let loginObj = new Vue({
             const provider = new firebase.auth.GoogleAuthProvider();
             firebase.auth().signInWithPopup(provider)
                 .then(result => {
+                    this.show = false
                     const user = result.user
                     helloObj.user = user
                     helloObj.showname()
                     selectclassObj.init_class_list()
-                    this.show = false
                 })
         }
     }
@@ -43,15 +43,28 @@ let selectclassObj = new Vue({
     el: "#selectclassDiv",
     data: {
         show: false,
-        selected: "coding101",
-        options: [
-            { text: "coding101", value: "coding101" },
-            { text: "econ203", value: "econ203" }
-        ]
+        selected: "",
+        options: []
     },
     methods: {
         init_class_list: function() {
             this.show = true
+            const app = firebase.app()
+            const db = firebase.firestore()
+            const user = firebase.auth().currentUser
+            const schedule = db.collection("private").doc(user.email)
+            schedule.onSnapshot(doc => {
+                const data = doc.data()
+                this.options = data.classes.map(function(element) {
+                    return { value: element, text: element }
+                })
+                try {
+                    this.selected = this.options[0].text
+                } catch (e) {
+                    console.log(e)
+                }
+
+            })
         }
     }
 })
