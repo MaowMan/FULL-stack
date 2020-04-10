@@ -23,24 +23,41 @@
 
 <body>
     <div class="box">
-        <div class="content">
-            <h1> Fire-roll-caller</h1>
-            <p>智慧點名系統</p>
-        </div>
-        <div class="buttons is-centered" id="loginDiv" v-if="show">
-            <button class="button is-primary" v-on:click="login">Login with Google</button>
-        </div>
-        <div class="content" id="helloDiv" v-if="show">
-            <p>{{message}}</p>
-        </div>
-        <div class="select" id="selectclassDiv" v-if="show" v-model="selected">
-            <select>
-                <option v-for="option in options" :value="option.value">{{option.text}}</option>
-            </select>
-        </div>
-        <div class="footer level-right">
+        <nav class="level">
+            <div class="content">
+                <h1> Fire-roll-caller</h1>
+                <p>智慧點名系統</p>
+            </div>
+        </nav>
+        <nav class="level" id="loginDiv" v-if="show">
+            <div class="buttons is-centered">
+                <button class="button is-primary" v-on:click="login">Login with Google</button>
+            </div>
+        </nav>
+        <nav class="level" id="helloDiv" v-if="show">
+            <div class="content">
+                <p>{{message}}</p>
+            </div>
+        </nav>
+        <nav class="level" id="selectclassDiv" v-if="show">
+            <div class="select">
+                <select v-on:change="select_changed" v-model="selected">
+                    <option v-for="option in options" :value="option.value">{{option.text}}</option>
+                </select>
+            </div>
+        </nav>
+        <nav class="level" id="infoDiv" v-if="show">
+            <button class="button" v-bind:class="class_attr">
+                {{message}}
+            </button>
+        </nav>
+        <nav class="level" id="formDiv" v-if="show">
+            <input class="input" type="text" placeholder="安全識別碼" v-if="not_done" v-model="code">
+            <button class="button is-link">{{message}}</button>
+        </nav>
+        <div class="footer level-right ">
             <p>
-                <strong>Fire-roll-caller</strong> by <a href="https://github.com/MaowMan"> Github:MaowMan </a>
+                <strong>Fire-roll-caller</strong> by <a href="https://github.com/MaowMan "> Github:MaowMan </a>
             </p>
         </div>
     </div>
