@@ -1,7 +1,19 @@
 document.addEventListener("DOMContentLoaded", event => {
     const app = firebase.app()
     console.log(app)
+    if (navigator.geolocation) {
+        console.log("support geopoint")
+        navigator.geolocation.getCurrentPosition(location => {
+            geopoint = { latitude: location.coords.latitude, longitude: location.coords.longitude }
+            console.log(geopoint)
+        })
+
+
+    }
 })
+
+let geopoint = { latitude: 0, longitude: 0 }
+
 
 let loginObj = new Vue({
     el: "#loginDiv",
@@ -78,12 +90,18 @@ let infoObj = new Vue({
         show: false,
         open: false,
         message: "",
-        class_attr: "is-info"
+        class_attr: "is-info",
+        nogeo: true
     },
     methods: {
         check_if_class_open: function() {
             //console.log(class_name)
             this.show = true
+            if (geopoint) {
+                this.nogeo = false
+            } else {
+                this.nogeo = true
+            }
             const class_name = selectclassObj.selected
             const app = firebase.app()
             const db = firebase.firestore()
@@ -112,7 +130,6 @@ let infoObj = new Vue({
                         this.message = "出現未知的錯誤"
                         this.class_attr = "is-danger"
                         this.open = false
-                        console.log(err)
                         formObj.init_form()
                     }
                 )
@@ -128,7 +145,7 @@ let formObj = new Vue({
         show: false,
         not_done: true,
         code: "",
-        message: ""
+        message: "",
     },
     methods: {
         init_form: function() {
@@ -142,6 +159,7 @@ let formObj = new Vue({
             const db = firebase.firestore()
             const user = firebase.auth().currentUser
             const class_name = selectclassObj.selected
+            this.code = ""
             meta = db.collection(class_name).doc("public")
             meta.get()
                 .then(
@@ -156,7 +174,7 @@ let formObj = new Vue({
                         })
                     },
                     err => {
-                        console.log(err)
+
                     }
                 )
         },
@@ -166,7 +184,22 @@ let formObj = new Vue({
                 const db = firebase.firestore()
                 const user = firebase.auth().currentUser
                 const class_name = selectclassObj.selected
+                const code = this.code
+                const collection = db.collection("log")
+                collection.add({
+                    class: class_name,
+                    email: user.email,
+                    uid: user.uid,
+                    code: code,
+                    geo: geopoint
+                }).then(
+                    ref => {
+                        formObj.check_done()
+                    },
+                    err => {
 
+                    }
+                )
             }
         }
     }

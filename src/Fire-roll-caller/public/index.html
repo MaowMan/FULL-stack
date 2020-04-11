@@ -4,7 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Welcome to Firebase Hosting</title>
+    <title>智慧點名系統</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.8.0/css/bulma.min.css">
     <!-- update the version number as needed -->
     <script defer src=" /__/firebase/7.13.2/firebase-app.js "></script>
@@ -50,10 +50,13 @@
             <button class="button" v-bind:class="class_attr">
                 {{message}}
             </button>
+            <button class="button is-warning" v-if="nogeo">
+                未啟用地理資訊
+            </button>
         </nav>
         <nav class="level" id="formDiv" v-if="show">
             <input class="input" type="text" placeholder="安全識別碼" v-if="not_done" v-model="code">
-            <button class="button is-link">{{message}}</button>
+            <button class="button is-link" v-on:click="submit">{{message}}</button>
         </nav>
         <div class="footer level-right ">
             <p>
