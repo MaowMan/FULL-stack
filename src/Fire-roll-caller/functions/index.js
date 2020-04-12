@@ -26,21 +26,26 @@ exports.log_incoming = functions.firestore.document("/log/{doc}").onCreate(event
         .then(doc => {
             sheet_data = doc.data()
             console.log(sheet_data)
-            if (sheet_data.students.indexOf(uid) !== -1) {
-                let flag = true
-                if (code !== sheet_data.code && sheet_data.code_strict === true) {
+            let flag = true
+            if (sheet_data.students.indexOf(uid) === -1) {
+                flag = false
+            }
+            if (code !== sheet_data.code && sheet_data.code_strict === true) {
+                flag = false
+            }
+            if (sheet_data.geo_strict === true) {
+                if (geopoint === null || geolib.getDistance(geopoint, sheet_data.geo) > sheet_data.geo_dist) {
                     flag = false
                 }
-                if (geolib.getDistance(geopoint, sheet_data.geo) > sheet_data.geo_dist && sheet_data.geo_strict === true) {
-                    flag = false
-                }
-                if (flag === true) {
-                    admin.firestore().collection(class_name).doc("public").update({
-                        current: admin.firestore.FieldValue.arrayUnion(email)
-                    })
-                } else {
-                    admin.firestore().collection("log").doc(doc_id).delete()
-                }
+            }
+            if (flag === true) {
+                admin.firestore().collection(class_name).doc("public").update({
+                    current: admin.firestore.FieldValue.arrayUnion(email)
+                })
+                console.log("success")
+            } else {
+                admin.firestore().collection("log").doc(doc_id).delete()
+                console.log("failed")
             }
             return 0
         })

@@ -12,7 +12,7 @@ document.addEventListener("DOMContentLoaded", event => {
     }
 })
 
-let geopoint = { latitude: 0, longitude: 0 }
+let geopoint = null
 
 
 let loginObj = new Vue({
