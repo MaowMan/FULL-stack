@@ -38,6 +38,7 @@
             <div class="content">
                 <p>{{message}}</p>
             </div>
+            <button class="button is-primary is-light">{{portal_message}}</button>
         </nav>
         <nav class="level" id="selectclassDiv" v-if="show">
             <div class="select">
@@ -50,7 +51,7 @@
             <button class="button" v-bind:class="class_attr">
                 {{message}}
             </button>
-            <button class="button is-warning" v-if="nogeo">
+            <button class="button is-warning is-light" v-if="nogeo">
                 未啟用地理資訊
             </button>
         </nav>

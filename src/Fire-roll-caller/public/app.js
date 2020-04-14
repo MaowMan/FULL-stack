@@ -40,13 +40,30 @@ let helloObj = new Vue({
     data: {
         user: null,
         show: false,
-        message: ""
+        message: "",
+        portal_message: ""
     },
     methods: {
         showname: function() {
             this.message = "Hello ," + this.user.displayName
+            this.portal_message = "進入管理員模式"
             this.show = true
+        },
+        into_admin: function() {
+            const app = firebase.app()
+            const db = firebase.firestore()
+            const user = firebase.auth().currentUser
+            let flag = fasle
+            db.collection("core").doc("adminauth"), get()
+                .then(
+                    flag = true
+                )
+                .catch(err => {
+                    console.log(err)
+                    alert("你不具有管理員權限")
+                })
         }
+
     }
 
 })
@@ -75,6 +92,11 @@ let selectclassObj = new Vue({
                 } catch (e) {
                     console.log(e)
                 }
+                if (selectclassObj.options.length === 0) {
+                    this.show = false
+                } else {
+                    this.show = true
+                }
                 infoObj.check_if_class_open()
             })
         },
@@ -97,6 +119,9 @@ let infoObj = new Vue({
         check_if_class_open: function() {
             //console.log(class_name)
             this.show = true
+            if (selectclassObj.options.length === 0) {
+                this.show = false
+            }
             if (geopoint) {
                 this.nogeo = false
             } else {
@@ -150,6 +175,9 @@ let formObj = new Vue({
     methods: {
         init_form: function() {
             this.show = infoObj.open
+            if (selectclassObj.options.length === 0) {
+                this.show = false
+            }
             this.not_done = true
             this.message = "提交"
             this.check_done()
