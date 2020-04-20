@@ -43,9 +43,10 @@ exports.log_incoming = functions.firestore.document("/log/{doc}").onCreate(event
                     current: admin.firestore.FieldValue.arrayUnion(email)
                 })
                 console.log("success")
+                admin.firestore().collection("log").doc(doc_id).update({ status: true })
             } else {
-                admin.firestore().collection("log").doc(doc_id).delete()
                 console.log("failed")
+                admin.firestore().collection("log").doc(doc_id).update({ status: false })
             }
             return 0
         })

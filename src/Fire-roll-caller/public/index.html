@@ -38,7 +38,7 @@
             <div class="content">
                 <p>{{message}}</p>
             </div>
-            <button class="button is-primary is-light">{{portal_message}}</button>
+            <button class="button is-primary is-light" v-on:click="">{{portal_message}}</button>
         </nav>
         <nav class="level" id="selectclassDiv" v-if="show">
             <div class="select">
@@ -57,7 +57,8 @@
         </nav>
         <nav class="level" id="formDiv" v-if="show">
             <input class="input" type="text" placeholder="安全識別碼" v-if="not_done" v-model="code">
-            <button class="button is-link" v-on:click="submit">{{message}}</button>
+            <progress class="progress is-success" v-if="processing"></progress>
+            <button class="button is-link" v-if="button_show" v-on:click="submit">{{message}}</button>
         </nav>
         <div class="footer level-right ">
             <p>

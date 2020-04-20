@@ -6,6 +6,7 @@ document.addEventListener("DOMContentLoaded", event => {
         navigator.geolocation.getCurrentPosition(location => {
             geopoint = { latitude: location.coords.latitude, longitude: location.coords.longitude }
             console.log(geopoint)
+            Object.freeze(geopoint)
         })
 
 
@@ -53,7 +54,7 @@ let helloObj = new Vue({
             const app = firebase.app()
             const db = firebase.firestore()
             const user = firebase.auth().currentUser
-            let flag = fasle
+            let flag = false
             db.collection("core").doc("adminauth"), get()
                 .then(
                     flag = true
@@ -171,6 +172,8 @@ let formObj = new Vue({
         not_done: true,
         code: "",
         message: "",
+        button_show: true,
+        processing: false
     },
     methods: {
         init_form: function() {
@@ -219,16 +222,44 @@ let formObj = new Vue({
                     email: user.email,
                     uid: user.uid,
                     code: code,
-                    geo: geopoint
+                    geo: geopoint,
+                    status: null
                 }).then(
                     ref => {
-                        formObj.check_done()
+                        this.process_animation(ref.id)
                     },
                     err => {
 
                     }
                 )
             }
+        },
+        process_animation: function(docid) {
+            console.log("process_animation")
+            this.not_done = false
+            this.button_show = false
+            this.processing = true
+            const app = firebase.app()
+            const db = firebase.firestore()
+            const user = firebase.auth().currentUser
+            log = db.collection("log").doc(docid)
+            let listener = log.onSnapshot(doc => {
+                let status = doc.data().status
+                console.log(status)
+                if (status === false || status === true) {
+                    console.log("done process")
+                    if (status === false) {
+                        alert("點名失敗")
+                    } else {
+                        alert("點名成功")
+                    }
+                    this.not_done = true
+                    this.button_show = true
+                    this.processing = false
+                    listener()
+                    this.check_done()
+                }
+            })
         }
     }
 })
