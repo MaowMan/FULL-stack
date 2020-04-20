@@ -42,7 +42,8 @@ let helloObj = new Vue({
         user: null,
         show: false,
         message: "",
-        portal_message: ""
+        portal_message: "",
+        allow_click: true
     },
     methods: {
         showname: function() {
@@ -51,18 +52,25 @@ let helloObj = new Vue({
             this.show = true
         },
         into_admin: function() {
-            const app = firebase.app()
-            const db = firebase.firestore()
-            const user = firebase.auth().currentUser
-            let flag = false
-            db.collection("core").doc("adminauth"), get()
-                .then(
-                    flag = true
-                )
-                .catch(err => {
-                    console.log(err)
-                    alert("你不具有管理員權限")
-                })
+            if (this.allow_click) {
+                this.allow_click = false
+                const app = firebase.app()
+                const db = firebase.firestore()
+                const user = firebase.auth().currentUser
+                db.collection("core").doc("adminauth").get()
+                    .then(doc => {
+                        alert("進入管理員介面")
+                        devObj.init_dev()
+                    })
+                    .catch(err => {
+                        console.log(err)
+                        alert("你不具有管理員權限")
+                    })
+                    .finally(res => {
+                        this.allow_click = true
+                    })
+            }
+
         }
 
     }
@@ -260,6 +268,19 @@ let formObj = new Vue({
                     this.check_done()
                 }
             })
+        }
+    }
+})
+
+let devObj = new Vue({
+    el: "#devDiv",
+    data: {
+        show: false
+    },
+    methods: {
+        init_dev: function() {
+            [selectclassObj, infoObj, formObj].forEach(element => element.show = false)
+            this.show = true
         }
     }
 })
