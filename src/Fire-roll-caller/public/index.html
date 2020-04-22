@@ -63,6 +63,12 @@
         <nav class="level" id="devDiv" v-if="show">
             <p>管理員介面</p>
         </nav>
+        <nav class="level" id="selectdevclassDiv" v-if="show">
+            <div class="select" v-if="show_select">
+                <option v-for="option in options" :value="option.value">{{option.text}}</option>
+            </div>
+            <button class="button is-success" v-on:click="create_newclass">創建新班級</button>
+        </nav>
         <div class="footer level-right ">
             <p>
                 <strong>Fire-roll-caller</strong> by <a href="https://github.com/MaowMan "> Github:MaowMan </a>

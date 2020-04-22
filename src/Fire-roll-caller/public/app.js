@@ -60,7 +60,7 @@ let helloObj = new Vue({
                 db.collection("core").doc("adminauth").get()
                     .then(doc => {
                         alert("進入管理員介面")
-                        devObj.init_dev()
+                        devObj.show_dev(true)
                     })
                     .catch(err => {
                         console.log(err)
@@ -278,9 +278,18 @@ let devObj = new Vue({
         show: false
     },
     methods: {
-        init_dev: function() {
-            [selectclassObj, infoObj, formObj].forEach(element => element.show = false)
-            this.show = true
+        show_dev: function(flag) {
+            [selectclassObj, infoObj, formObj].forEach(element => element.show = !flag);
+            [devObj, selectclassObj].forEach(element => element.show = flag);
         }
+    }
+})
+
+let select_dev_class = new Vue({
+    el: "#selectdevclassDiv",
+    data: {
+        show: false,
+        show_class: false
+
     }
 })
