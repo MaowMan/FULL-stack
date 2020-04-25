@@ -15,7 +15,7 @@ admin.initializeApp(functions.config().firebase)
 exports.log_incoming = functions.firestore.document("/log/{doc}").onCreate(event => {
     const doc_id = event.id
     const data = event.data()
-    console.log(data)
+        //console.log(data)
     const class_name = data.class
     const email = data.email
     const uid = data.uid
@@ -25,7 +25,7 @@ exports.log_incoming = functions.firestore.document("/log/{doc}").onCreate(event
     admin.firestore().collection(class_name).doc("private").get()
         .then(doc => {
             sheet_data = doc.data()
-            console.log(sheet_data)
+                //console.log(sheet_data)
             let flag = true
             if (sheet_data.students.indexOf(uid) === -1) {
                 flag = false
@@ -40,12 +40,12 @@ exports.log_incoming = functions.firestore.document("/log/{doc}").onCreate(event
             }
             if (flag === true) {
                 admin.firestore().collection(class_name).doc("public").update({
-                    current: admin.firestore.FieldValue.arrayUnion(email)
-                })
-                console.log("success")
+                        current: admin.firestore.FieldValue.arrayUnion(email)
+                    })
+                    //console.log("success")
                 admin.firestore().collection("log").doc(doc_id).update({ status: true })
             } else {
-                console.log("failed")
+                //console.log("failed")
                 admin.firestore().collection("log").doc(doc_id).update({ status: false })
             }
             return 0
@@ -54,4 +54,20 @@ exports.log_incoming = functions.firestore.document("/log/{doc}").onCreate(event
             console.log(err)
         })
     return 0
+})
+
+exports.new_user = functions.auth.user().onCreate(user => {
+    admin.firestore().collection("core").doc("meta").update({
+        users: admin.firestore.FieldValue.arrayUnion(user.email)
+    })
+    admin.firestore().collection("user-data").doc(user.email).create({
+        classes: [],
+        own: [],
+        uid: user.uid
+    })
+    return 0
+})
+
+exports.new_class = functions.firestore.document("req/{doc}").onCreate(event => {
+
 })

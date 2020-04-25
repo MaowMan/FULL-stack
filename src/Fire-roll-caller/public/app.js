@@ -51,28 +51,36 @@ let helloObj = new Vue({
             this.portal_message = "進入管理員模式"
             this.show = true
         },
-        into_admin: function() {
-            if (this.allow_click) {
-                this.allow_click = false
-                const app = firebase.app()
-                const db = firebase.firestore()
-                const user = firebase.auth().currentUser
-                db.collection("core").doc("adminauth").get()
-                    .then(doc => {
-                        alert("進入管理員介面")
-                        devObj.show_dev(true)
-                    })
-                    .catch(err => {
-                        console.log(err)
-                        alert("你不具有管理員權限")
-                    })
-                    .finally(res => {
-                        this.allow_click = true
-                    })
+        alter_mode: function() {
+            if (devObj.show === false) {
+                if (this.allow_click) {
+                    this.allow_click = false
+                    const app = firebase.app()
+                    const db = firebase.firestore()
+                    const user = firebase.auth().currentUser
+                    db.collection("core").doc("adminauth").get()
+                        .then(doc => {
+                            devObj.show_dev(true)
+                            this.portal_message = "返回使用者模式"
+                        })
+                        .catch(err => {
+                            console.log(err)
+                            alert("你不具有管理員權限")
+                        })
+                        .finally(res => {
+                            this.allow_click = true
+                        })
+                }
+
+            } else {
+                if (this.allow_click) {
+                    this.allow_click = false
+                    devObj.show_dev(false)
+                    this.portal_message = "進入管理員模式"
+                    this.allow_click = true
+                }
             }
-
         }
-
     }
 
 })
@@ -126,48 +134,49 @@ let infoObj = new Vue({
     },
     methods: {
         check_if_class_open: function() {
-            //console.log(class_name)
-            this.show = true
-            if (selectclassObj.options.length === 0) {
-                this.show = false
-            }
-            if (geopoint) {
-                this.nogeo = false
-            } else {
-                this.nogeo = true
-            }
-            const class_name = selectclassObj.selected
-            const app = firebase.app()
-            const db = firebase.firestore()
-            const user = firebase.auth().currentUser
-            meta = db.collection(class_name).doc("public")
-            meta.get()
-                .then(
-                    doc => {
-                        meta.onSnapshot(doc => {
-                            const data = doc.data()
-                            const is_open = data.open
-                            if (is_open === true) {
-                                this.message = class_name + "現在開放點名"
-                                this.class_attr = "is-info"
-                                this.open = true
+            if (selectclassObj.selected !== "") {
+                this.show = true
+                if (selectclassObj.options.length === 0) {
+                    this.show = false
+                }
+                if (geopoint) {
+                    this.nogeo = false
+                } else {
+                    this.nogeo = true
+                }
+                const class_name = selectclassObj.selected
+                const app = firebase.app()
+                const db = firebase.firestore()
+                const user = firebase.auth().currentUser
+                meta = db.collection(class_name).doc("public")
+                meta.get()
+                    .then(
+                        doc => {
+                            meta.onSnapshot(doc => {
+                                const data = doc.data()
+                                const is_open = data.open
+                                if (is_open === true) {
+                                    this.message = class_name + "現在開放點名"
+                                    this.class_attr = "is-info"
+                                    this.open = true
 
-                            } else if (is_open === false) {
-                                this.message = class_name + "現在不開放點名"
-                                this.class_attr = "is-warning"
-                                this.open = false
-                            }
+                                } else if (is_open === false) {
+                                    this.message = class_name + "現在不開放點名"
+                                    this.class_attr = "is-warning"
+                                    this.open = false
+                                }
+                                formObj.init_form()
+                            });
+                        },
+                        err => {
+                            this.message = "出現未知的錯誤"
+                            this.class_attr = "is-danger"
+                            this.open = false
                             formObj.init_form()
-                        });
-                    },
-                    err => {
-                        this.message = "出現未知的錯誤"
-                        this.class_attr = "is-danger"
-                        this.open = false
-                        formObj.init_form()
-                    }
-                )
-            formObj.init_form()
+                        }
+                    )
+                formObj.init_form()
+            }
         }
     }
 
@@ -279,17 +288,27 @@ let devObj = new Vue({
     },
     methods: {
         show_dev: function(flag) {
-            [selectclassObj, infoObj, formObj].forEach(element => element.show = !flag);
-            [devObj, selectclassObj].forEach(element => element.show = flag);
+            [devObj, selectdevclassObj].forEach(element => element.show = flag);
+            [selectclassObj, infoObj, formObj].forEach(element => element.show = !flag)
+            if (flag === false) {
+                selectclassObj.init_class_list()
+            }
         }
     }
 })
 
-let select_dev_class = new Vue({
+let selectdevclassObj = new Vue({
     el: "#selectdevclassDiv",
     data: {
         show: false,
-        show_class: false
-
+        show_select: false,
+        selected: null,
+        options: []
+    },
+    methods: {
+        create_newclass: function() {
+            console.log("create_new_class")
+        }
     }
+
 })
