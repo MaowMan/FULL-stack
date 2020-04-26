@@ -15,6 +15,20 @@ document.addEventListener("DOMContentLoaded", event => {
 
 let geopoint = null
 
+Vue.directive('click-outside', {
+    bind: function(el, binding, vnode) {
+        this.event = function(event) {
+            if (!(el === event.target || el.contains(event.target))) {
+                vnode.context[binding.expression](event);
+            }
+        };
+        document.body.addEventListener('click', this.event)
+    },
+    unbind: function(el) {
+        document.body.removeEventListener('click', this.event)
+    },
+});
+
 
 let loginObj = new Vue({
     el: "#loginDiv",
@@ -307,8 +321,31 @@ let selectdevclassObj = new Vue({
     },
     methods: {
         create_newclass: function() {
-            console.log("create_new_class")
+            cardObj.visible()
         }
     }
 
+})
+
+let cardObj = new Vue({
+    el: "#cardDiv",
+    data: {
+        class_attr: "",
+        ready: false
+    },
+    methods: {
+        invisible: function() {
+            if (this.ready === true) {
+                this.class_attr = ""
+                this.ready = false
+            }
+        },
+        visible: function() {
+            this.class_attr = "is-active"
+            setTimeout(function() {
+                cardObj.ready = true
+                console.log("ready")
+            }, 300)
+        }
+    }
 })

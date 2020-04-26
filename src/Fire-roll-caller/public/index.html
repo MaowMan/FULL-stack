@@ -18,6 +18,8 @@
 
     <script defer src="https://cdn.jsdelivr.net/npm/vue"></script>
 
+    <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.15/lodash.min.js"></script>
+
     <script defer src="app.js "></script>
 </head>
 
@@ -74,7 +76,24 @@
                 <strong>Fire-roll-caller</strong> by <a href="https://github.com/MaowMan "> Github:MaowMan </a>
             </p>
         </div>
+        <div class="modal" id="cardDiv" v-bind:class="class_attr">
+            <div class="modal-background"></div>
+            <div class="modal-card" v-click-outside="invisible">
+                <header class="modal-card-head">
+                    <p class="modal-card-title">創建新班級</p>
+                    <button class="delete" aria-label="close" v-on:click="invisible"></button>
+                </header>
+                <section class="modal-card-body">
+                    <!-- Content ... -->
+                </section>
+                <footer class="modal-card-foot">
+                    <button class="button is-success">提交</button>
+                    <button class="button" v-on:click="invisible">取消</button>
+                </footer>
+            </div>
+        </div>
     </div>
+
 </body>
 
 </html>
