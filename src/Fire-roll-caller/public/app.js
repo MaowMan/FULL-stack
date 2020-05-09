@@ -236,7 +236,7 @@ let formObj = new Vue({
                         })
                     },
                     err => {
-
+                        console.log(err)
                     }
                 )
         },
@@ -273,7 +273,7 @@ let formObj = new Vue({
             const app = firebase.app()
             const db = firebase.firestore()
             const user = firebase.auth().currentUser
-            log = db.collection("log").doc(docid)
+            let log = db.collection("log").doc(docid)
             let listener = log.onSnapshot(doc => {
                 let status = doc.data().status
                 console.log(status)
@@ -331,21 +331,59 @@ let cardObj = new Vue({
     el: "#cardDiv",
     data: {
         class_attr: "",
-        ready: false
+        ready: false,
+        class_name: "",
+        not_done: true
     },
     methods: {
         invisible: function() {
             if (this.ready === true) {
                 this.class_attr = ""
                 this.ready = false
+                console.log("invisible")
             }
         },
         visible: function() {
             this.class_attr = "is-active"
             setTimeout(function() {
                 cardObj.ready = true
-                console.log("ready")
             }, 300)
+        },
+        submit: function() {
+            console.log("start submitting")
+            const app = firebase.app()
+            const db = firebase.firestore()
+            const user = firebase.auth().currentUser
+            db.collection("req").add({
+                class_name: this.class_name,
+                owner: user.uid,
+                status: null
+            }).then(ref => {
+                    this.submit_animation(ref.id)
+                },
+                err => {
+                    console.log(err)
+                })
+        },
+        submit_animation: function(docid) {
+            this.not_done = false
+            const app = firebase.app()
+            const db = firebase.firestore()
+            const user = firebase.auth().currentUser
+            let req = db.collection("req").doc(docid)
+            let listener = req.onSnapshot(doc => {
+                let status = doc.data().status
+                if (status === true || status === false) {
+                    if (status === true) {
+                        alert("成功創建班級")
+                    } else {
+                        alert("創造班級失敗")
+                    }
+                    this.not_done = true
+                    listener()
+                }
+
+            })
         }
     }
 })

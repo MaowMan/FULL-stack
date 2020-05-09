@@ -69,7 +69,7 @@
             <div class="select" v-if="show_select">
                 <option v-for="option in options" :value="option.value">{{option.text}}</option>
             </div>
-            <button class="button is-success" v-on:click="create_newclass">創建新班級</button>
+            <button class="button is-link" v-on:click="create_newclass">創建新班級</button>
         </nav>
         <div class="footer level-right ">
             <p>
@@ -84,11 +84,14 @@
                     <button class="delete" aria-label="close" v-on:click="invisible"></button>
                 </header>
                 <section class="modal-card-body">
-                    <!-- Content ... -->
+                    <input class="input" type="text" placeholder="班級名稱" v-model="class_name" v-if="not_done">
+                    <p v-else="not_done">正在創建：{{class_name}}</p>
                 </section>
                 <footer class="modal-card-foot">
-                    <button class="button is-success">提交</button>
-                    <button class="button" v-on:click="invisible">取消</button>
+                    <button class="button is-success" v-on:click="submit" v-if="not_done">提交</button>
+                    <button class="button" v-on:click="invisible" v-if="not_done">取消</button>
+                    <progress class="progress is-small is-arrowless is-success" v-else="not_done"></progress>
+
                 </footer>
             </div>
         </div>

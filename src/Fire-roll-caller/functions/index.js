@@ -69,5 +69,7 @@ exports.new_user = functions.auth.user().onCreate(user => {
 })
 
 exports.new_class = functions.firestore.document("req/{doc}").onCreate(event => {
-
+    const id = event.id
+    const data = event.data()
+    
 })
