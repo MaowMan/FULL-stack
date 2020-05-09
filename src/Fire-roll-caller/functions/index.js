@@ -68,8 +68,56 @@ exports.new_user = functions.auth.user().onCreate(user => {
     return 0
 })
 
-exports.new_class = functions.firestore.document("req/{doc}").onCreate(event => {
+exports.new_class = functions.firestore.document("/req/{doc}").onCreate(event => {
     const id = event.id
     const data = event.data()
-    
+    console.log(data)
+    admin.firestore().collection("core").doc("classes").get()
+        .then(doc => {
+            const sheet_data = doc.data()
+            console.log(sheet_data)
+            if (!sheet_data.main.includes(data.class_name)) {
+                admin.firestore().collection("core").doc("classes").update({
+                    main: admin.firestore.FieldValue.arrayUnion(data.class_name)
+                })
+                admin.firestore().collection("user-data").doc(data.email).update({
+                    own: admin.firestore.FieldValue.arrayUnion(data.class_name)
+                })
+                admin.firestore().collection(data.class_name).doc("public").create({
+                    current: [],
+                    open: false
+                })
+                admin.firestore().collection(data.class_name).doc("private").create({
+                    code: "123456",
+                    code_strict: false,
+                    geo: {
+                        latitude: 0,
+                        longitude: 0
+                    },
+                    geo_dist: 0,
+                    geo_strict: false,
+                    owner: data.owner,
+                    students: [],
+                    invite: id
+                }).then(res => {
+                    admin.firestore().collection("req").doc(id).update({
+                        status: true
+                    })
+                    return 0
+                }).catch(err => {
+                    console.log(err)
+                    admin.firestore().collection("req").doc(id).update({
+                        status: false
+                    })
+                })
+            } else {
+                admin.firestore().collection("req").doc(id).update({
+                    status: false
+                })
+            }
+            return 0
+        }).catch(err => {
+            console.log(err)
+        })
+    return 0;
 })

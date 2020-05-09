@@ -127,6 +127,7 @@ let selectclassObj = new Vue({
                     this.show = false
                 } else {
                     this.show = true
+
                 }
                 infoObj.check_if_class_open()
             })
@@ -350,16 +351,18 @@ let cardObj = new Vue({
             }, 300)
         },
         submit: function() {
-            console.log("start submitting")
+            //console.log("start submitting")
             const app = firebase.app()
             const db = firebase.firestore()
             const user = firebase.auth().currentUser
+            this.submit_animation(ref.id)
             db.collection("req").add({
                 class_name: this.class_name,
                 owner: user.uid,
-                status: null
+                status: null,
+                email: user.email
             }).then(ref => {
-                    this.submit_animation(ref.id)
+
                 },
                 err => {
                     console.log(err)
@@ -381,8 +384,8 @@ let cardObj = new Vue({
                     }
                     this.not_done = true
                     listener()
+                    devObj.show_dev(true)
                 }
-
             })
         }
     }
